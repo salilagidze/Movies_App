@@ -1,4 +1,12 @@
-mport UIKit
+//
+//  TabBarConrtoller.swift
+//  Final_Exam_Movies
+//
+//  Created by Sali  on 24.12.25.
+//
+
+
+import UIKit
 
 class TabBarConrtoler: UITabBarController {
     
@@ -12,20 +20,20 @@ class TabBarConrtoler: UITabBarController {
         // Home
         let homeVC = HomeVC()
         homeVC.tabBarItem = UITabBarItem(title: "Home",image: UIImage(systemName: "house"),tag: 0)
-        let homeNav = UINavigationController(rootViewController: homeVC)
+        let homeNavigation = UINavigationController(rootViewController: homeVC)
 
         // Search
         let searchVC = SearchVC()
         searchVC.tabBarItem = UITabBarItem(title: "Search",image: UIImage(systemName: "magnifyingglass"),tag: 1
         )
-        let searchNav = UINavigationController(rootViewController: searchVC)
+        let searchNavigation = UINavigationController(rootViewController: searchVC)
 
         // Favorites
         let favoritesVC = FavoritesVC()
         favoritesVC.tabBarItem = UITabBarItem(title: "Favourites", image: UIImage(systemName: "bookmark.fill"), tag: 2)
-        let favNav = UINavigationController(rootViewController: favoritesVC)
+        let favNavigation = UINavigationController(rootViewController: favoritesVC)
 
-        self.viewControllers = [homeNav, searchNav, favNav]
+        self.viewControllers = [homeNavigation, searchNavigation, favNavigation]
     }
 
 }
