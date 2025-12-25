@@ -14,8 +14,8 @@
             filePath = "Final_Exam_Movies/DetailsPage/DetailVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
             landmarkName = "favoritesTapped()"
             landmarkType = "7">
          </BreakpointContent>

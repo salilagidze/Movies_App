@@ -39,7 +39,16 @@ class DetailVC: UIViewController {
         setupBottomView()
         bindViewModel()
         viewModel.fetchDetails()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
     }
     
     func setupTopView() {
@@ -80,8 +89,6 @@ class DetailVC: UIViewController {
             ratingLabel.leadingAnchor.constraint(equalTo: ratingIcon.trailingAnchor, constant: 4),
             ratingLabel.trailingAnchor.constraint(equalTo: imdbRatingView.trailingAnchor, constant: -8),
             ratingLabel.centerYAnchor.constraint(equalTo: imdbRatingView.centerYAnchor),
-            
-            
         ])
         
         mainMovieTitleLabel.textColor = .white
@@ -94,7 +101,7 @@ class DetailVC: UIViewController {
         
         mainPoster.contentMode = .scaleAspectFill
         mainPoster.clipsToBounds = true
-        mainPoster.backgroundColor = .red
+        mainPoster.backgroundColor = .black
         mainPoster.layer.masksToBounds = true
         mainPoster.layer.cornerRadius = 20
         mainPoster.layer.maskedCorners = [
@@ -103,7 +110,7 @@ class DetailVC: UIViewController {
         ]
         
         miniPoster.clipsToBounds = true
-        miniPoster.backgroundColor = .gray
+        miniPoster.backgroundColor = .black
         miniPoster.layer.cornerRadius = 20
         
         movietitle.textColor = .white
@@ -134,9 +141,6 @@ class DetailVC: UIViewController {
         infoStack.addArrangedSubview(movieInfo(icon: "clock", label: runTime))
         infoStack.addArrangedSubview(makeDivider())
         infoStack.addArrangedSubview(movieInfo(icon: "film", label: action))
-
-        
-        
         
         NSLayoutConstraint.activate([
             infoStack.topAnchor.constraint(equalTo: miniPoster.bottomAnchor, constant: 15),

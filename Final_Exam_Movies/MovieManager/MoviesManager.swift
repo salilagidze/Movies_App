@@ -16,7 +16,7 @@ class MoviesManager {
     let queue = DispatchQueue(label: "favorites.queue", attributes: .concurrent)
     
     func fetchMovies(page: Int, completion: @escaping ([Movie]) -> Void) {
-        let urlString = "https://www.omdbapi.com/?apikey=fd67c604&s=ball&type=movie&(page)"
+        let urlString = "https://www.omdbapi.com/?apikey=fd67c604&s=spider&type=movie&page=\(page)"
         guard let url = URL(string: urlString) else {
             completion([])
             return

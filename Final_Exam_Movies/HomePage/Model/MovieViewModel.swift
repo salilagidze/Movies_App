@@ -12,7 +12,8 @@ class MovieViewModel {
     
     private var movies: [Movie] = []
     private var page = 1
-    private var isLoading = false
+    var currentSearch = "ball"
+    var isLoading = false
     var reloadData: (() -> Void)?
     var movieCount: Int {
          movies.count
@@ -33,5 +34,11 @@ class MovieViewModel {
                 self?.reloadData?()
             }
         }
+    }
+    func resetSearch(_ search: String) {
+        currentSearch = search
+        page = 1
+        movies.removeAll()
+        fetchMovies()
     }
 }
