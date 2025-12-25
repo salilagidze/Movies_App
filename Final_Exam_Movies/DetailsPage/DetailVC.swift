@@ -9,6 +9,8 @@ import UIKit
 
 class DetailVC: UIViewController {
     
+    var viewModel: MovieDetailsViewModel!
+    
     let mainMovieTitleLabel = UILabel()
     let mainPoster = UIImageView()
     let miniPoster = UIImageView()
@@ -32,8 +34,11 @@ class DetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        navigationItem.largeTitleDisplayMode = .never
         setupTopView()
         setupBottomView()
+        bindViewModel()
+        viewModel.fetchDetails()
         
     }
     
@@ -45,22 +50,22 @@ class DetailVC: UIViewController {
             imdbRatingView.addSubview(ratingLabel)
         }
         NSLayoutConstraint.activate([
-            mainMovieTitleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-            mainMovieTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            mainMovieTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            mainMovieTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            mainMovieTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             mainPoster.topAnchor.constraint(equalTo: mainMovieTitleLabel.bottomAnchor, constant: 10),
             mainPoster.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mainPoster.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mainPoster.heightAnchor.constraint(equalToConstant: 200),
-            
             miniPoster.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             miniPoster.topAnchor.constraint(equalTo: mainPoster.bottomAnchor, constant: -75),
             miniPoster.widthAnchor.constraint(equalToConstant: 110),
             miniPoster.heightAnchor.constraint(equalToConstant: 150),
             
-            movietitle.topAnchor.constraint(equalTo: mainPoster.bottomAnchor, constant: 10),
-            movietitle.leadingAnchor.constraint(equalTo: miniPoster.trailingAnchor, constant: 8),
-            movietitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+            movietitle.topAnchor.constraint(equalTo: mainPoster.bottomAnchor, constant: 12),
+            movietitle.leadingAnchor.constraint(equalTo: miniPoster.trailingAnchor, constant: 10),
+            movietitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             imdbRatingView.bottomAnchor.constraint(equalTo: mainPoster.bottomAnchor, constant: -12),
             imdbRatingView.trailingAnchor.constraint(equalTo: mainPoster.trailingAnchor, constant: -12),
@@ -82,7 +87,10 @@ class DetailVC: UIViewController {
         mainMovieTitleLabel.textColor = .white
         mainMovieTitleLabel.textAlignment = .center
         mainMovieTitleLabel.text = "Movie Title"
-        mainMovieTitleLabel.font = .boldSystemFont(ofSize: 25)
+        mainMovieTitleLabel.font = .boldSystemFont(ofSize: 20)
+        mainMovieTitleLabel.numberOfLines = 0
+        mainMovieTitleLabel.lineBreakMode = .byWordWrapping
+        mainMovieTitleLabel.textAlignment = .center
         
         mainPoster.contentMode = .scaleAspectFill
         mainPoster.clipsToBounds = true
@@ -99,8 +107,10 @@ class DetailVC: UIViewController {
         miniPoster.layer.cornerRadius = 20
         
         movietitle.textColor = .white
-        movietitle.font = .boldSystemFont(ofSize: 22)
-        movietitle.text = "Spider"
+        movietitle.font = .boldSystemFont(ofSize: 20)
+        movietitle.text = ""
+        movietitle.numberOfLines = 2
+        movietitle.lineBreakMode = .byWordWrapping
         
         imdbRatingView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
         imdbRatingView.layer.cornerRadius = 10
@@ -119,11 +129,12 @@ class DetailVC: UIViewController {
         infoStack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(infoStack)
         
-        infoStack.addArrangedSubview(movieInfo(icon: "calendar", text: "2024"))
+        infoStack.addArrangedSubview(movieInfo(icon: "calendar", label: yearTitle))
         infoStack.addArrangedSubview(makeDivider())
-        infoStack.addArrangedSubview(movieInfo(icon: "clock", text: "145 Minutes"))
+        infoStack.addArrangedSubview(movieInfo(icon: "clock", label: runTime))
         infoStack.addArrangedSubview(makeDivider())
-        infoStack.addArrangedSubview(movieInfo(icon: "film", text: "Action"))
+        infoStack.addArrangedSubview(movieInfo(icon: "film", label: action))
+
         
         
         
@@ -132,12 +143,11 @@ class DetailVC: UIViewController {
             infoStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             infoStack.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -15),
             infoStack.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 15)
-
         ])
         
     }
     
-    func movieInfo(icon: String, text: String) -> UIView {
+    func movieInfo(icon: String, label: UILabel) -> UIView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 6
@@ -149,15 +159,12 @@ class DetailVC: UIViewController {
         iconImageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
         iconImageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
         
-        
-        let textLabel = UILabel()
-        textLabel.text = text
-        textLabel.textColor = UIColor.gray.withAlphaComponent(0.6)
-        textLabel.font = .systemFont(ofSize: 17)
-        textLabel.numberOfLines = 1
+        label.textColor = UIColor.gray.withAlphaComponent(0.6)
+        label.font = .systemFont(ofSize: 17)
+        label.numberOfLines = 1
         
         stack.addArrangedSubview(iconImageView)
-        stack.addArrangedSubview(textLabel)
+        stack.addArrangedSubview(label)
         
         return stack
         
@@ -232,5 +239,35 @@ class DetailVC: UIViewController {
             }
             
         })
+    }
+    private func loadImage(from url: URL, into imageView: UIImageView) {
+           URLSession.shared.dataTask(with: url) { data, _, _ in
+               if let data = data {
+                   DispatchQueue.main.async {
+                       imageView.image = UIImage(data: data)
+                   }
+               }
+           }.resume()
+       }
+    
+    private func bindViewModel() {
+        viewModel.onUpdate = { [weak self] in
+            guard let self = self,
+                  let movie = self.viewModel.movie else { return }
+            
+            self.mainMovieTitleLabel.text = movie.title
+            self.movietitle.text = movie.title
+            self.textAbout.text = movie.plot
+            self.ratingLabel.text = movie.imdbRating
+            self.yearTitle.text = movie.year
+            self.runTime.text = movie.runtime
+            self.action.text = movie.genre
+            
+            if let url = URL(string: movie.poster) {
+            self.loadImage(from: url, into: self.mainPoster)
+            self.loadImage(from: url, into: self.miniPoster)
+            }
+            
+        }
     }
 }

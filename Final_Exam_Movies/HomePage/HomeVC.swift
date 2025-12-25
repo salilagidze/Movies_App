@@ -34,6 +34,7 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        navigationItem.backButtonTitle = "Movies"
         viewModel = MovieViewModel()
         setupView()
         viewModel.fetchMovies()
@@ -45,7 +46,8 @@ class HomeVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+       
     }
     
     
@@ -96,6 +98,18 @@ extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
         
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let movie = viewModel.movie(at: indexPath.row)
+        let detailsVC = DetailVC()
+        detailsVC.viewModel = MovieDetailsViewModel(imdbID: movie.imdbID)
+        navigationController?.pushViewController(detailsVC, animated: true)
+    }
+    func showDetails(for movie: Movie) {
+        let detailVC = DetailVC()
+        detailVC.viewModel = MovieDetailsViewModel(imdbID: movie.imdbID)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
     extension HomeVC: UIScrollViewDelegate {
         
@@ -107,7 +121,6 @@ extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
             if position > contentHeight - height {
                 viewModel.fetchMovies()
             }
-            
-        }        
+        }
 }
 

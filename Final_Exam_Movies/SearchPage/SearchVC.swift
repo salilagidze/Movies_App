@@ -68,15 +68,16 @@ class SearchVC: UIViewController {
     
     func setupMenu() {
         let menu = UIMenu(children: [
-            UIAction(title: "Sort by Name") { _ in
+            UIAction(title: "Name") { _ in
                 print("Sort by Name")
             },
-            UIAction(title: "Sort by Year") { _ in
-                print("Sort by Year")
-            },
-            UIAction(title: "Sort by Genre") { _ in
+            UIAction(title: "Genre") { _ in
                 print("Sort by Genre")
+            },
+            UIAction(title: "Year") { _ in
+                print("Sort by Year")
             }
+         
         ])
         
         menuButton.menu = menu

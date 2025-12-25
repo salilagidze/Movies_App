@@ -46,13 +46,13 @@ class SearchCell: UICollectionViewCell {
             contentView.layer.cornerRadius = 10
             
             titleLabel.textColor = .white
-            titleLabel.text = "title"
+            titleLabel.text = "Title"
             titleLabel.font = .boldSystemFont(ofSize: 15)
             
             genreLabel.textColor = .lightGray
-            genreLabel.text = "genre"
+            genreLabel.text = "Genre"
             yearLabel.textColor = .lightGray
-            yearLabel.text = "year"
+            yearLabel.text = "Year"
             
      
         

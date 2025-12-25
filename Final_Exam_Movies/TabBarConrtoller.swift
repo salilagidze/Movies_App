@@ -8,14 +8,14 @@
 
 import UIKit
 
-class TabBarConrtoler: UITabBarController {
+class TabBarConrtoller: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpControllers()
+        setUpController()
         // Do any additional setup after loading the view.
     }
-    private func setUpControllers() {
+    private func setUpController() {
 
         // Home
         let homeVC = HomeVC()
