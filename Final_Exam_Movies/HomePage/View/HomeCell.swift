@@ -18,7 +18,6 @@ class HomeCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupCell()
     }
     required init?(coder: NSCoder) {

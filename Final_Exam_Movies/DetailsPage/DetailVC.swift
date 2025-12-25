@@ -23,7 +23,7 @@ class DetailVC: UIViewController {
     let divider2 = UIView()
     let textAbout = UILabel()
     let infoStack = UIStackView()
-    let imdbRaitingView = UIView()
+    let imdbRatingView = UIView()
     let ratingIcon = UIImageView()
     let ratingLabel = UILabel()
     
@@ -38,12 +38,14 @@ class DetailVC: UIViewController {
     }
     
     func setupTopView() {
-        [mainMovieTitleLabel, mainPoster, miniPoster, imdbRaitingView, ratingIcon, ratingLabel, movietitle,].forEach {
+        [mainMovieTitleLabel, mainPoster, miniPoster, imdbRatingView, ratingIcon, ratingLabel, movietitle].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
+            imdbRatingView.addSubview(ratingIcon)
+            imdbRatingView.addSubview(ratingLabel)
         }
         NSLayoutConstraint.activate([
-            mainMovieTitleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            mainMovieTitleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
             mainMovieTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             mainPoster.topAnchor.constraint(equalTo: mainMovieTitleLabel.bottomAnchor, constant: 10),
@@ -60,18 +62,19 @@ class DetailVC: UIViewController {
             movietitle.leadingAnchor.constraint(equalTo: miniPoster.trailingAnchor, constant: 8),
             movietitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
             
-            imdbRaitingView.bottomAnchor.constraint(equalTo: mainPoster.bottomAnchor, constant: -12),
-            imdbRaitingView.trailingAnchor.constraint(equalTo: mainPoster.trailingAnchor, constant: -12),
-            imdbRaitingView.heightAnchor.constraint(equalToConstant: 32),
+            imdbRatingView.bottomAnchor.constraint(equalTo: mainPoster.bottomAnchor, constant: -12),
+            imdbRatingView.trailingAnchor.constraint(equalTo: mainPoster.trailingAnchor, constant: -12),
+            imdbRatingView.heightAnchor.constraint(equalToConstant: 32),
+            imdbRatingView.widthAnchor.constraint(greaterThanOrEqualToConstant: 70),
             
-            ratingIcon.leadingAnchor.constraint(equalTo: imdbRaitingView.leadingAnchor, constant: 8),
-            ratingIcon.centerYAnchor.constraint(equalTo: imdbRaitingView.centerYAnchor),
+            ratingIcon.leadingAnchor.constraint(equalTo: imdbRatingView.leadingAnchor, constant: 8),
+            ratingIcon.centerYAnchor.constraint(equalTo: imdbRatingView.centerYAnchor),
             ratingIcon.widthAnchor.constraint(equalToConstant: 24),
             ratingIcon.heightAnchor.constraint(equalToConstant: 24),
             
             ratingLabel.leadingAnchor.constraint(equalTo: ratingIcon.trailingAnchor, constant: 4),
-            ratingLabel.trailingAnchor.constraint(equalTo: imdbRaitingView.trailingAnchor, constant: -8),
-            ratingLabel.centerYAnchor.constraint(equalTo: imdbRaitingView.centerYAnchor),
+            ratingLabel.trailingAnchor.constraint(equalTo: imdbRatingView.trailingAnchor, constant: -8),
+            ratingLabel.centerYAnchor.constraint(equalTo: imdbRatingView.centerYAnchor),
             
             
         ])
@@ -99,8 +102,8 @@ class DetailVC: UIViewController {
         movietitle.font = .boldSystemFont(ofSize: 22)
         movietitle.text = "Spider"
         
-        imdbRaitingView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-        imdbRaitingView.layer.cornerRadius = 10
+        imdbRatingView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        imdbRatingView.layer.cornerRadius = 10
         
         ratingIcon.image = UIImage(systemName: "star")
         ratingIcon.tintColor = .systemOrange
@@ -127,7 +130,9 @@ class DetailVC: UIViewController {
         NSLayoutConstraint.activate([
             infoStack.topAnchor.constraint(equalTo: miniPoster.bottomAnchor, constant: 15),
             infoStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            infoStack.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -15)
+            infoStack.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -15),
+            infoStack.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 15)
+
         ])
         
     }

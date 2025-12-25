@@ -33,7 +33,7 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        setupCollectionView()
+        setupView()
         
     }
     
@@ -43,7 +43,7 @@ class HomeVC: UIViewController {
     }
     
     
-    func setupCollectionView() {
+    func setupView() {
         movieTitleLael.translatesAutoresizingMaskIntoConstraints = false
         movieCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(movieTitleLael)

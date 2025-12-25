@@ -9,9 +9,53 @@ import UIKit
 
 class SearchCell: UICollectionViewCell {
     
-    let nameLabel = UILabel()
+    static let identifier = "SearchCell"
+    
+    let titleLabel = UILabel()
     let genreLabel = UILabel()
     let yearLabel = UILabel()
-    let sortLabel = UILabel()
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSearchUI()
+        
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupSearchUI() {
+        [titleLabel, genreLabel, yearLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview($0)
+        }
+            NSLayoutConstraint.activate([
+             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+        
+             genreLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
+             genreLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+
+             yearLabel.topAnchor.constraint(equalTo: genreLabel.bottomAnchor, constant: 4),
+             yearLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+             yearLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
+             ])
+            
+            contentView.backgroundColor = UIColor(white: 0.20, alpha: 1)
+            contentView.layer.cornerRadius = 10
+            
+            titleLabel.textColor = .white
+            titleLabel.text = "title"
+            titleLabel.font = .boldSystemFont(ofSize: 15)
+            
+            genreLabel.textColor = .lightGray
+            genreLabel.text = "genre"
+            yearLabel.textColor = .lightGray
+            yearLabel.text = "year"
+            
+     
+        
+    }
     
 }
