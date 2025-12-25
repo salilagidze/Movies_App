@@ -18,17 +18,17 @@ class FavoritesVC: UIViewController {
     }()
     
     let FavoritesomvieCollectionView: UICollectionView = {
-    let configuration = UICollectionViewFlowLayout()
+        let configuration = UICollectionViewFlowLayout()
         configuration.scrollDirection = .vertical
         configuration.itemSize = CGSize(width: 110, height: 195)
         configuration.minimumLineSpacing = 20
         configuration.minimumInteritemSpacing = 13
         configuration.sectionInset = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
-    let collection = UICollectionView(frame: .zero, collectionViewLayout: configuration)
-            collection.backgroundColor = .black
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: configuration)
+        collection.backgroundColor = .black
         return collection
     }()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +48,7 @@ class FavoritesVC: UIViewController {
         FavoritesomvieCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(favoritesLabel)
         view.addSubview(FavoritesomvieCollectionView)
-       
+        
         NSLayoutConstraint.activate([
             favoritesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
             favoritesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
@@ -75,6 +75,6 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         cell.backgroundColor = .darkGray
         return cell
-        }
     }
+}
 
