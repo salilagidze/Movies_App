@@ -9,6 +9,7 @@ import UIKit
 
 class HomeVC: UIViewController {
     
+    var viewModel: MovieViewModel!
     let movieTitleLael: UILabel = {
         let label = UILabel()
         label.text = "Movies"
@@ -33,7 +34,12 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        viewModel = MovieViewModel()
         setupView()
+        viewModel.fetchMovies()
+        viewModel.reloadData = { [weak self] in
+            self?.movieCollectionView.reloadData()
+        }
         
     }
     
@@ -60,26 +66,48 @@ class HomeVC: UIViewController {
         
         movieCollectionView.dataSource = self
         movieCollectionView.delegate = self
-        movieCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        movieCollectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.identifier)
     }
     
 }
 
 extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        60
+        return viewModel.movieCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .darkGray
-        return cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell else {
+            return UICollectionViewCell()
         }
+        let movie = viewModel.movie(at: indexPath.row)
+        cell.titleLabel.text = movie.title
+        
+        if let url = URL(string: movie.poster) {
+            URLSession.shared.dataTask(with: url) { (data, _, _) in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        cell.moviePoster.image = UIImage(data: data)
+                    }
+                }
+                
+            }.resume()
+        }
+        
+        return cell
     }
-
-
-import SwiftUI
-
-#Preview {
-    HomeVC()
 }
+    extension HomeVC: UIScrollViewDelegate {
+        
+        func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            let position = scrollView.contentOffset.y
+            let contentHeight = scrollView.contentSize.height
+            let height = scrollView.frame.size.height
+            
+            if position > contentHeight - height {
+                viewModel.fetchMovies()
+            }
+            
+        }        
+}
+

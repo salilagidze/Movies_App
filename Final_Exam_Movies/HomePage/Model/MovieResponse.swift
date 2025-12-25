@@ -12,12 +12,22 @@ struct Movie: Codable {
     let year: String
     let imdbID: String
     let type: String
+    let poster: String
     
-    init(title: String, year: String, imdbID: String, type: String) {
+    init(title: String, year: String, imdbID: String, type: String, poster: String) {
         self.title = title
         self.year = year
         self.imdbID = imdbID
         self.type = type
+        self.poster = poster
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case title = "Title"
+        case year = "Year"
+        case imdbID
+        case type  = "Type"
+        case poster = "Poster"
     }
 }
 

@@ -9,7 +9,8 @@ import UIKit
 
 class HomeCell: UICollectionViewCell {
     
-    static let identifier: String = "MoviesCollectionViewCell"
+    static let identifier: String = "HomeCell"
+    private var movie: Movie?
     
     let titleLabel = UILabel()
     let moviePoster = UIImageView()
