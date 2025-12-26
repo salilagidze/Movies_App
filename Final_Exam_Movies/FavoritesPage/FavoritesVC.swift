@@ -67,8 +67,40 @@ class FavoritesVC: UIViewController {
 
 extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        60
-        
+        let count = MoviesManager.shared.getFavMovies().count
+        if count == 0 {
+            let container = UIView(frame: collectionView.bounds)
+            
+            let titleLabel = UILabel()
+            titleLabel.text = "No Favorites Yet"
+            titleLabel.textColor = .white
+            titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+            titleLabel.textAlignment = .center
+            let subTitleLabel = UILabel()
+            subTitleLabel.text = "All movies marked as favorite will be added here"
+            subTitleLabel.numberOfLines = 0
+            subTitleLabel.textColor = .lightGray
+            subTitleLabel.textAlignment = .center
+            let stackView = UIStackView(arrangedSubviews: [titleLabel, subTitleLabel])
+            stackView.alignment = .center
+            stackView.axis = .vertical
+            stackView.spacing = 8
+            stackView.translatesAutoresizingMaskIntoConstraints = false
+            
+            container.addSubview(stackView)
+            
+            NSLayoutConstraint.activate([
+                stackView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                stackView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+                stackView.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor, constant: 15),
+                stackView.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -15)
+            ])
+            collectionView.backgroundView = container
+        } else {
+            collectionView.backgroundView = nil
+            
+        }
+        return count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
