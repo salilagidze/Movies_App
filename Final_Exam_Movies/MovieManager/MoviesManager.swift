@@ -13,6 +13,7 @@ class MoviesManager {
     static let shared = MoviesManager()
     private init() {}
     private var favoriteMovies: [Movie] = []
+    
     let queue = DispatchQueue(label: "favorites.queue", attributes: .concurrent)
     
     func fetchMovies(page: Int, completion: @escaping ([Movie]) -> Void) {

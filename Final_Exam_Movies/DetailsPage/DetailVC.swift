@@ -11,6 +11,7 @@ class DetailVC: UIViewController {
     
     var viewModel: MovieDetailsViewModel!
     
+    
     let mainMovieTitleLabel = UILabel()
     let mainPoster = UIImageView()
     let miniPoster = UIImageView()
@@ -20,8 +21,7 @@ class DetailVC: UIViewController {
     let action = UILabel()
     let divider = UIView()
     let aboutMovieLabel = UILabel()
-    let favoriteButton = UIButton()
-    var isFavorite = false
+    let favoriteButton = UIButton(type: .system)
     let divider2 = UIView()
     let textAbout = UILabel()
     let infoStack = UIStackView()
@@ -39,11 +39,16 @@ class DetailVC: UIViewController {
         setupBottomView()
         bindViewModel()
         viewModel.fetchDetails()
+        navigationItem.hidesBackButton = false
+        navigationController?.navigationBar.isHidden = false
+        navigationItem.backButtonTitle = "Movies"
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -218,47 +223,71 @@ class DetailVC: UIViewController {
         
         favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
         favoriteButton.tintColor = .systemGray
-        favoriteButton.addTarget(self, action: #selector(favoritesTapped), for: .touchUpInside)
+        favoriteButton.addTarget(self, action: #selector(favoriteTapped), for: .touchUpInside)
         
         divider2.backgroundColor = .systemGray
         
-        textAbout.text = "ajafakjfbjavjsv"
+        textAbout.text = ""
         textAbout.numberOfLines = 0
         textAbout.textColor = .systemGray
         
     }
+    func makeMovieFromDetails(_ details: MovieDetails) -> Movie {
+        return Movie(
+            title: details.title ?? "",
+            year: details.year ?? "",
+            imdbID: details.imdbID,
+            type: "movie",
+            poster: details.poster
+        )
+    }
     
-    @objc private func favoritesTapped() {
-        isFavorite.toggle()
+    @objc func favoriteTapped() {
+        guard let details = viewModel.movie else { return }
         
-        let imageName = isFavorite ? "heart.fill" : "heart"
+        let movie = makeMovieFromDetails(details)
+        
+        if MoviesManager.shared.isFavoriteMovie(movie) {
+            MoviesManager.shared.removeFavoriteMovie(movie)
+          
+        } else {
+            MoviesManager.shared.addFavoriteMovie(movie)
+        }
+        
+        let isFavorite = MoviesManager.shared.isFavoriteMovie(movie)
+        updateFavoriteButton(isfavorite: isFavorite)
+    }
+    
+    
+    private func updateFavoriteButton(isfavorite: Bool) {
+        
+        let imageName = isfavorite ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
-        favoriteButton.tintColor = isFavorite ? .systemRed : .systemGray
+        favoriteButton.tintColor = isfavorite ? .systemRed : .systemGray
         
         UIView.animate(withDuration: 0.2, animations: {
             self.favoriteButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-        }, completion: { _ in
+        }) {_ in
             UIView.animate(withDuration: 0.2) {
                 self.favoriteButton.transform = .identity
             }
-            
-        })
+        }
     }
+    
     private func loadImage(from url: URL, into imageView: UIImageView) {
-           URLSession.shared.dataTask(with: url) { data, _, _ in
-               if let data = data {
-                   DispatchQueue.main.async {
-                       imageView.image = UIImage(data: data)
-                   }
-               }
-           }.resume()
-       }
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            if let data = data {
+                DispatchQueue.main.async {
+                    imageView.image = UIImage(data: data)
+                }
+            }
+        }.resume()
+    }
     
     private func bindViewModel() {
         viewModel.onUpdate = { [weak self] in
             guard let self = self,
                   let movie = self.viewModel.movie else { return }
-            
             self.mainMovieTitleLabel.text = movie.title
             self.movietitle.text = movie.title
             self.textAbout.text = movie.plot
@@ -268,10 +297,13 @@ class DetailVC: UIViewController {
             self.action.text = movie.genre
             
             if let url = URL(string: movie.poster) {
-            self.loadImage(from: url, into: self.mainPoster)
-            self.loadImage(from: url, into: self.miniPoster)
+                self.loadImage(from: url, into: self.mainPoster)
+                self.loadImage(from: url, into: self.miniPoster)
+                
             }
-            
+            let FavMovie = self.makeMovieFromDetails(movie)
+            let isFav = MoviesManager.shared.isFavoriteMovie(FavMovie)
+            self.updateFavoriteButton(isfavorite: isFav)
         }
     }
 }

@@ -14,7 +14,8 @@ class HomeCell: UICollectionViewCell {
     
     let titleLabel = UILabel()
     let moviePoster = UIImageView()
-    let getDetailsButton = UIButton(type: .system)
+    let pushButton = UIButton(type: .system)
+    var favoriteButtonTapped: (() -> Void)?
 
     
     override init(frame: CGRect) {
@@ -24,12 +25,15 @@ class HomeCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        moviePoster.image = nil
+    }
     func setupCell() {
             contentView.backgroundColor = .black
             contentView.layer.cornerRadius = 10
             contentView.clipsToBounds = true
-        [titleLabel, moviePoster, getDetailsButton].forEach {
+        [titleLabel, moviePoster, pushButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }

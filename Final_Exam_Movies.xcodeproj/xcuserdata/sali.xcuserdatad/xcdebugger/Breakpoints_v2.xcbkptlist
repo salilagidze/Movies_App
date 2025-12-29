@@ -8,15 +8,15 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "5C38BA4B-7D47-429B-867A-36F8760CF8AC"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Final_Exam_Movies/DetailsPage/DetailVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
-            landmarkName = "favoritesTapped()"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
+            landmarkName = "updateFavoriteButton(isfavorite:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

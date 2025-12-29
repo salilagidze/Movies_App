@@ -40,6 +40,11 @@ class FavoritesVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        FavoritesomvieCollectionView.reloadData()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     
@@ -60,7 +65,7 @@ class FavoritesVC: UIViewController {
         
         FavoritesomvieCollectionView.dataSource = self
         FavoritesomvieCollectionView.delegate = self
-        FavoritesomvieCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        FavoritesomvieCollectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.identifier)
     }
     
 }
@@ -103,10 +108,40 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
         return count
     }
     
+//    func setupBackButton {
+//        
+//    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .darkGray
-        return cell
-    }
+       guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell
+        else {
+           return UICollectionViewCell()
+       }
+            let movie = MoviesManager.shared.getFavMovies()[indexPath.row]
+            cell.titleLabel.text = movie.title
+            cell.favoriteButtonTapped = {
+                MoviesManager.shared.removeFavoriteMovie(movie)
+                collectionView.reloadData()
+            }
+            if let url = URL(string: movie.poster) {
+                URLSession.shared.dataTask(with: url) { data, _, _ in
+                    if let data = data {
+                        DispatchQueue.main.async {
+                            cell.moviePoster.image = UIImage(data: data)
+                        }
+                    }
+                }.resume()
+            }
+            return cell
+        }
+
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            let movie = MoviesManager.shared.getFavMovies()[indexPath.row]
+            let detailVC = DetailVC()
+            detailVC.viewModel = MovieDetailsViewModel(imdbID: movie.imdbID)
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
+    
+    
 }
 
