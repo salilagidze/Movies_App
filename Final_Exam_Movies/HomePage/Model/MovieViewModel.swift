@@ -26,7 +26,7 @@ class MovieViewModel {
     func fetchMovies() {
         guard  !isLoading else { return }
         isLoading = true
-        MoviesManager.shared.fetchMovies (page: page) { [weak self] newMovies in
+        MoviesManager.shared.fetchMovies (search: currentSearch, page: page) { [weak self] newMovies in
             DispatchQueue.main.async {
                 self?.movies.append(contentsOf: newMovies)
                 self?.page += 1
