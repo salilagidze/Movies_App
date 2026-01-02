@@ -9,7 +9,7 @@ import UIKit
 
 class SearchVC: UIViewController {
     
-    var searchedMovies: [Movie] = []
+    var viewModel = SearchViewModel()
     let searchTitle = UILabel()
     let searchBar = UISearchBar()
     let menuButton = UIButton(type: .system)
@@ -29,6 +29,10 @@ class SearchVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         
+        viewModel.update = { [weak self] in
+            self?.searchCollectionView.reloadData()
+        }
+        
         setupSearch()
         setupMenu()
         
@@ -36,7 +40,7 @@ class SearchVC: UIViewController {
         searchCollectionView.delegate = self
         searchCollectionView.dataSource = self
         searchCollectionView.register(SearchCell.self, forCellWithReuseIdentifier: SearchCell.identifier)
-        searchedMovies = []
+         
     }
     
     func setupSearch() {
@@ -71,6 +75,7 @@ class SearchVC: UIViewController {
         searchBar.placeholder = "Search Movies"
         searchBar.searchTextField.textColor = .white
         searchBar.searchTextField.tintColor = .white
+        searchBar.keyboardType = .alphabet
         
         menuButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
         menuButton.tintColor = .lightGray
@@ -80,14 +85,14 @@ class SearchVC: UIViewController {
     
     func setupMenu() {
         let menu = UIMenu(children: [
-            UIAction(title: "Name") { _ in
-                print("Sort by Name")
+            UIAction(title: "Name") { [weak self] _ in
+                self?.viewModel.sortByName()
             },
-            UIAction(title: "Genre") { _ in
-                print("Sort by Genre")
+            UIAction(title: "A-Z") { [weak self] _ in
+                self?.viewModel.sortByName()
             },
-            UIAction(title: "Year") { _ in
-                print("Sort by Year")
+            UIAction(title: "Year") { [weak self] _ in
+                self?.viewModel.sortByYear()
             }
             
         ])
@@ -99,27 +104,17 @@ class SearchVC: UIViewController {
 }
 
 extension SearchVC: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        if searchText.isEmpty {
-            searchedMovies = []
-            searchCollectionView.reloadData()
-            return
+        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+            viewModel.search(text: searchText)
         }
-        
-        MoviesManager.shared.fetchMovies(search: searchText, page: 1) { [weak self] movies in
-            DispatchQueue.main.async {
-                self?.searchedMovies = movies
-                self?.searchCollectionView.reloadData()
-            }
-        }
+      
     }
-}
+
 extension SearchVC: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        searchedMovies.count
+        viewModel.count()
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -130,10 +125,23 @@ extension SearchVC: UICollectionViewDataSource, UICollectionViewDelegate {
             for: indexPath
         ) as! SearchCell
         
-        let movie = searchedMovies[indexPath.item]
+        let movie = viewModel.movie(at: indexPath.item)
         cell.titleLabel.text = movie.title
-        cell.genreLabel.text = movie.type
         cell.yearLabel.text = movie.year
+        cell.ratingLabel.text = ""
+        cell.actionLabel.text = ""
+        cell.runTimeLabel.text = ""
+        
+        MoviesManager.shared.fetchMovieDetails(imdbID: movie.imdbID) { details in
+            guard let details else { return }
+            DispatchQueue.main.async {
+                if collectionView.indexPath(for: cell) == indexPath {
+                    cell.ratingLabel.text = details.imdbRating
+                    cell.actionLabel.text = details.genre
+                    cell.runTimeLabel.text = details.runtime
+                }
+            }
+        }
         
         if let url = URL(string: movie.poster) {
             URLSession.shared.dataTask(with: url) { data, _, _ in

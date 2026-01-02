@@ -9,6 +9,7 @@ import UIKit
 
 class FavoritesVC: UIViewController {
     
+    let viewModel = FavoritesViewModel()
     let favoritesLabel: UILabel = {
         let favoriteLabel = UILabel()
         favoriteLabel.text = "Favorites"
@@ -34,6 +35,9 @@ class FavoritesVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         setupCollectionView()
+        viewModel.update = { [weak self] in
+            self?.FavoritesomvieCollectionView.reloadData()
+        }
         
     }
     
@@ -72,7 +76,7 @@ class FavoritesVC: UIViewController {
 
 extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = MoviesManager.shared.getFavMovies().count
+        let count = viewModel.count()
         if count == 0 {
             let container = UIView(frame: collectionView.bounds)
             
@@ -108,21 +112,18 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
         return count
     }
     
-//    func setupBackButton {
-//        
-//    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell
         else {
            return UICollectionViewCell()
        }
-            let movie = MoviesManager.shared.getFavMovies()[indexPath.row]
+        let movie = viewModel.movie(at: indexPath.row)
             cell.titleLabel.text = movie.title
-            cell.favoriteButtonTapped = {
-                MoviesManager.shared.removeFavoriteMovie(movie)
-                collectionView.reloadData()
-            }
+            cell.favoriteButtonTapped = { [weak self] in
+            self?.viewModel.remove(at: indexPath.row)
+        }
+       
             if let url = URL(string: movie.poster) {
                 URLSession.shared.dataTask(with: url) { data, _, _ in
                     if let data = data {
@@ -136,7 +137,7 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
         }
 
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            let movie = MoviesManager.shared.getFavMovies()[indexPath.row]
+            let movie = viewModel.movie(at: indexPath.row)
             let detailVC = DetailVC()
             detailVC.viewModel = MovieDetailsViewModel(imdbID: movie.imdbID)
             navigationController?.pushViewController(detailVC, animated: true)

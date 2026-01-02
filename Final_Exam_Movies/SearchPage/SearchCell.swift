@@ -13,8 +13,11 @@ class SearchCell: UICollectionViewCell {
     
     let posterView = UIImageView()
     let titleLabel = UILabel()
-    let genreLabel = UILabel()
+    let infoStackView = UIStackView()
+    let ratingLabel = UILabel()
+    let actionLabel = UILabel()
     let yearLabel = UILabel()
+    let runTimeLabel = UILabel()
     
     
     override init(frame: CGRect) {
@@ -27,10 +30,14 @@ class SearchCell: UICollectionViewCell {
     }
     
     func setupSearchUI() {
-        [posterView, titleLabel, genreLabel, yearLabel].forEach {
+        [posterView, titleLabel, infoStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
+        infoStackView.axis = .vertical
+        infoStackView.spacing = 4
+        infoStackView.alignment = .leading
+        
         NSLayoutConstraint.activate([
             
             posterView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
@@ -39,15 +46,11 @@ class SearchCell: UICollectionViewCell {
             posterView.heightAnchor.constraint(equalToConstant: 120),
             
             titleLabel.topAnchor.constraint(equalTo: posterView.topAnchor),
-                    titleLabel.leadingAnchor.constraint(equalTo: posterView.trailingAnchor, constant: 12),
-                    titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            
-            genreLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
-            genreLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
-            yearLabel.topAnchor.constraint(equalTo: genreLabel.bottomAnchor, constant: 4),
-            yearLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            yearLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+            titleLabel.leadingAnchor.constraint(equalTo: posterView.trailingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            infoStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
+            infoStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            infoStackView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -10)
         ])
         
         contentView.backgroundColor = .black
@@ -57,12 +60,35 @@ class SearchCell: UICollectionViewCell {
         titleLabel.text = "Title"
         titleLabel.font = .boldSystemFont(ofSize: 15)
         
-        genreLabel.textColor = .lightGray
-        genreLabel.text = "Genre"
+        infoStackView.addArrangedSubview(movieInfo(icon: "star", label: ratingLabel, iconColor: .systemOrange))
+        infoStackView.addArrangedSubview(movieInfo(icon: "film", label: actionLabel))
+        infoStackView.addArrangedSubview(movieInfo(icon: "calendar", label: yearLabel))
+        infoStackView.addArrangedSubview(movieInfo(icon: "clock", label: runTimeLabel))
         
-        yearLabel.textColor = .lightGray
-        yearLabel.text = "Year"
         
     }
+    func movieInfo(icon: String, label: UILabel, iconColor: UIColor = .gray) -> UIView {
+        let iconView = UIImageView(image: UIImage(systemName: icon))
+        iconView.tintColor = iconColor
+        iconView.widthAnchor.constraint(equalToConstant: 14).isActive = true
+        iconView.heightAnchor.constraint(equalToConstant: 14).isActive = true
+        
+        label.font = .systemFont(ofSize: 13)
+        label.textColor = .lightGray
+        
+        let stack = UIStackView(arrangedSubviews: [iconView, label])
+        stack.axis = .horizontal
+        stack.spacing = 6
+        stack.alignment = .center
+        return stack
+    }
     
+    func configure(movie: Movie, details: MovieDetails?) {
+        titleLabel.text = movie.title
+        yearLabel.text = movie.year
+        ratingLabel.text = details?.imdbRating
+        actionLabel.text = details?.genre
+        runTimeLabel.text = details?.runtime
+    }
+        
 }

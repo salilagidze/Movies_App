@@ -61,9 +61,27 @@ class MoviesManager {
         return queue.sync {
             favoriteMovies.contains { $0.imdbID == movie.imdbID }
         }
-       
     }
- 
+    func fetchMovieDetails(imdbID:String, completion: @escaping (MovieDetails?) -> Void) {
+        let urlString = "https://www.omdbapi.com/?apikey=fd67c604&i=\(imdbID)"
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                completion(nil)
+                return
+            }
+        do {
+                let details = try JSONDecoder().decode(MovieDetails.self, from: data)
+            completion(details)
+            } catch {
+            completion(nil)
+        }
+        }.resume()
+    }
 }
 
 
