@@ -19,17 +19,17 @@ class HomeVC: UIViewController {
     }()
     
     let movieCollectionView: UICollectionView = {
-    let configuration = UICollectionViewFlowLayout()
+        let configuration = UICollectionViewFlowLayout()
         configuration.scrollDirection = .vertical
         configuration.itemSize = CGSize(width: 110, height: 195)
         configuration.minimumLineSpacing = 20
         configuration.minimumInteritemSpacing = 13
         configuration.sectionInset = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
-    let collection = UICollectionView(frame: .zero, collectionViewLayout: configuration)
-            collection.backgroundColor = .black
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: configuration)
+        collection.backgroundColor = .black
         return collection
     }()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +47,7 @@ class HomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
-       
+        
     }
     
     
@@ -56,7 +56,7 @@ class HomeVC: UIViewController {
         movieCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(movieTitleLael)
         view.addSubview(movieCollectionView)
-       
+        
         NSLayoutConstraint.activate([
             movieTitleLael.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
             movieTitleLael.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
@@ -111,16 +111,16 @@ extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
-    extension HomeVC: UIScrollViewDelegate {
+extension HomeVC: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let position = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let height = scrollView.frame.size.height
         
-        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            let position = scrollView.contentOffset.y
-            let contentHeight = scrollView.contentSize.height
-            let height = scrollView.frame.size.height
-            
-            if position > contentHeight - height {
-                viewModel.fetchMovies()
-            }
+        if position > contentHeight - height {
+            viewModel.fetchMovies()
         }
+    }
 }
 

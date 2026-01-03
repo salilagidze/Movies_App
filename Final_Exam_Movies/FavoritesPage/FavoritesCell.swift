@@ -14,7 +14,6 @@ class FvoritesCell: UICollectionViewCell {
     let titleLabel = UILabel()
     let moviePoster = UIImageView()
     let getDetailsButton = UIButton(type: .system)
-
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,9 +25,9 @@ class FvoritesCell: UICollectionViewCell {
     }
     
     func setupCell() {
-            contentView.backgroundColor = .black
-            contentView.layer.cornerRadius = 10
-            contentView.clipsToBounds = true
+        contentView.backgroundColor = .black
+        contentView.layer.cornerRadius = 10
+        contentView.clipsToBounds = true
         [titleLabel, moviePoster, getDetailsButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
@@ -43,8 +42,7 @@ class FvoritesCell: UICollectionViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
-            
-    ])
+        ])
         moviePoster.clipsToBounds = true
         moviePoster.layer.cornerRadius = 15
         moviePoster.contentMode = .scaleAspectFill
@@ -52,7 +50,6 @@ class FvoritesCell: UICollectionViewCell {
         titleLabel.numberOfLines = 2
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
         
-     
-  }
+    }
     
 }

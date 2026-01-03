@@ -11,7 +11,6 @@ class DetailVC: UIViewController {
     
     var viewModel: MovieDetailsViewModel!
     
-    
     let mainMovieTitleLabel = UILabel()
     let mainPoster = UIImageView()
     let miniPoster = UIImageView()
@@ -29,8 +28,6 @@ class DetailVC: UIViewController {
     let ratingIcon = UIImageView()
     let ratingLabel = UILabel()
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -42,7 +39,7 @@ class DetailVC: UIViewController {
         navigationItem.hidesBackButton = false
         navigationController?.navigationBar.isHidden = false
         navigationItem.backButtonTitle = "Movies"
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -249,7 +246,7 @@ class DetailVC: UIViewController {
         
         if MoviesManager.shared.isFavoriteMovie(movie) {
             MoviesManager.shared.removeFavoriteMovie(movie)
-          
+            
         } else {
             MoviesManager.shared.addFavoriteMovie(movie)
         }

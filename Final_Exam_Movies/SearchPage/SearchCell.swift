@@ -19,11 +19,9 @@ class SearchCell: UICollectionViewCell {
     let yearLabel = UILabel()
     let runTimeLabel = UILabel()
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSearchUI()
-        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -82,7 +80,7 @@ class SearchCell: UICollectionViewCell {
         stack.alignment = .center
         return stack
     }
-    
+
     func configure(movie: Movie, details: MovieDetails?) {
         titleLabel.text = movie.title
         yearLabel.text = movie.year
@@ -90,5 +88,5 @@ class SearchCell: UICollectionViewCell {
         actionLabel.text = details?.genre
         runTimeLabel.text = details?.runtime
     }
-        
+    
 }

@@ -30,7 +30,6 @@ class FavoritesVC: UIViewController {
         return collection
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -38,7 +37,6 @@ class FavoritesVC: UIViewController {
         viewModel.update = { [weak self] in
             self?.FavoritesomvieCollectionView.reloadData()
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,7 +48,6 @@ class FavoritesVC: UIViewController {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-    
     
     func setupCollectionView() {
         favoritesLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -71,7 +68,6 @@ class FavoritesVC: UIViewController {
         FavoritesomvieCollectionView.delegate = self
         FavoritesomvieCollectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.identifier)
     }
-    
 }
 
 extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -88,6 +84,7 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
             let subTitleLabel = UILabel()
             subTitleLabel.text = "All movies marked as favorite will be added here"
             subTitleLabel.numberOfLines = 0
+            subTitleLabel.lineBreakMode = .byWordWrapping
             subTitleLabel.textColor = .lightGray
             subTitleLabel.textAlignment = .center
             let stackView = UIStackView(arrangedSubviews: [titleLabel, subTitleLabel])
@@ -112,37 +109,34 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
         return count
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-       guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell
         else {
-           return UICollectionViewCell()
-       }
+            return UICollectionViewCell()
+        }
         let movie = viewModel.movie(at: indexPath.row)
-            cell.titleLabel.text = movie.title
-            cell.favoriteButtonTapped = { [weak self] in
+        cell.titleLabel.text = movie.title
+        cell.favoriteButtonTapped = { [weak self] in
             self?.viewModel.remove(at: indexPath.row)
         }
-       
-            if let url = URL(string: movie.poster) {
-                URLSession.shared.dataTask(with: url) { data, _, _ in
-                    if let data = data {
-                        DispatchQueue.main.async {
-                            cell.moviePoster.image = UIImage(data: data)
-                        }
+        
+        if let url = URL(string: movie.poster) {
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        cell.moviePoster.image = UIImage(data: data)
                     }
-                }.resume()
-            }
-            return cell
+                }
+            }.resume()
         }
-
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            let movie = viewModel.movie(at: indexPath.row)
-            let detailVC = DetailVC()
-            detailVC.viewModel = MovieDetailsViewModel(imdbID: movie.imdbID)
-            navigationController?.pushViewController(detailVC, animated: true)
-        }
+        return cell
+    }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let movie = viewModel.movie(at: indexPath.row)
+        let detailVC = DetailVC()
+        detailVC.viewModel = MovieDetailsViewModel(imdbID: movie.imdbID)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
 

@@ -40,7 +40,7 @@ class SearchVC: UIViewController {
         searchCollectionView.delegate = self
         searchCollectionView.dataSource = self
         searchCollectionView.register(SearchCell.self, forCellWithReuseIdentifier: SearchCell.identifier)
-         
+        
     }
     
     func setupSearch() {
@@ -104,11 +104,11 @@ class SearchVC: UIViewController {
 }
 
 extension SearchVC: UISearchBarDelegate {
-        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-            viewModel.search(text: searchText)
-        }
-      
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.search(text: searchText)
     }
+    
+}
 
 extension SearchVC: UICollectionViewDataSource, UICollectionViewDelegate {
     

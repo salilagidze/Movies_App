@@ -41,7 +41,7 @@ class SearchViewModel {
     }
     func sortByNameAlpha() {
         movies.sort { isAscending ? $0.title < $1.title : $0.title > $1.title
-    }
+        }
         update?()
     }
     func sortByYear() {

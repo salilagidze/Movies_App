@@ -74,12 +74,12 @@ class MoviesManager {
                 completion(nil)
                 return
             }
-        do {
+            do {
                 let details = try JSONDecoder().decode(MovieDetails.self, from: data)
-            completion(details)
+                completion(details)
             } catch {
-            completion(nil)
-        }
+                completion(nil)
+            }
         }.resume()
     }
 }

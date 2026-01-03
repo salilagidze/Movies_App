@@ -15,9 +15,9 @@ class MovieViewModel {
     var isLoading = false
     var reloadData: (() -> Void)?
     var movieCount: Int {
-         movies.count
+        movies.count
     }
-
+    
     func movie(at index: Int) -> Movie {
         return movies[index]
     }
