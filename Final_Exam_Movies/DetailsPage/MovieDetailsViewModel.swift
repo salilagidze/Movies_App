@@ -5,7 +5,7 @@
 //  Created by Sali  on 25.12.25.
 //
 
-import UIKit
+import Foundation
 
 class MovieDetailsViewModel {
     

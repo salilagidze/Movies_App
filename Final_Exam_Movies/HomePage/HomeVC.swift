@@ -38,6 +38,7 @@ class HomeVC: UIViewController {
         viewModel = MovieViewModel()
         setupView()
         viewModel.fetchMovies()
+        
         viewModel.reloadData = { [weak self] in
             self?.movieCollectionView.reloadData()
         }
@@ -49,7 +50,6 @@ class HomeVC: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
         
     }
-    
     
     func setupView() {
         movieTitleLael.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +70,6 @@ class HomeVC: UIViewController {
         movieCollectionView.delegate = self
         movieCollectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.identifier)
     }
-    
 }
 
 extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -82,8 +81,10 @@ extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell else {
             return UICollectionViewCell()
         }
+        //ფილმების მონაცემები
         let movie = viewModel.movie(at: indexPath.row)
         cell.titleLabel.text = movie.title
+        
         
         if let url = URL(string: movie.poster) {
             URLSession.shared.dataTask(with: url) { (data, _, _) in
@@ -99,16 +100,17 @@ extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let movie = viewModel.movie(at: indexPath.row)
-        let detailsVC = DetailVC()
-        detailsVC.viewModel = MovieDetailsViewModel(imdbID: movie.imdbID)
-        navigationController?.pushViewController(detailsVC, animated: true)
-    }
     func showDetails(for movie: Movie) {
         let detailVC = DetailVC()
         detailVC.viewModel = MovieDetailsViewModel(imdbID: movie.imdbID)
         navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let movie = viewModel.movie(at: indexPath.row)
+        let detailsVC = DetailVC()
+        showDetails(for: movie)
+        
     }
 }
 extension HomeVC: UIScrollViewDelegate {

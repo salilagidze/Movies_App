@@ -103,7 +103,6 @@ class ContactVC: UIViewController {
     
     @objc func emailTapped() {
         let email = "salagidze@gmail.com"
-        
         if let gmailUrl = URL(string: "https://accounts.google.com/v3/signin/accountchooser?continue=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&dsh=S-1339166863%3A1767454243551024&emr=1&followup=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&ifkv=Ac2yZaXRehY6pvN2tBtaiV1el_uF10IDKtQEe8rZHMO8FCLY29uE4cP2gawlNt3ELQbFFCGDypoJlg&osid=1&passive=1209600&service=mail&flowName=GlifWebSignIn&flowEntry=ServiceLogin"), UIApplication.shared.canOpenURL(gmailUrl) {
             UIApplication.shared.open(gmailUrl)
         } else if let mailToUrl = URL(string: "mailto:\(email)") {
@@ -118,6 +117,6 @@ class ContactVC: UIViewController {
         UIView.animate(withDuration: 0.7, delay: delay, usingSpringWithDamping: 0.65, initialSpringVelocity: 0.4, options: [.curveEaseOut], animations: {
             view.alpha = 1
             view.transform = .identity
-        } )
+        })
     }
 }
