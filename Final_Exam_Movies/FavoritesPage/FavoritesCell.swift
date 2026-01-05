@@ -1,5 +1,5 @@
 //
-//  FvoritesCell.swift
+//  FavoritesCell.swift
 //  Final_Exam_Movies
 //
 //  Created by Sali  on 25.12.25.
@@ -7,17 +7,15 @@
 
 import UIKit
 
-class FvoritesCell: UICollectionViewCell {
+class FavoritesCell: UICollectionViewCell {
     
-    static let identifier: String = "MoviesCollectionViewCell"
+    static let identifier: String = "FavoritesCell"
     
     let titleLabel = UILabel()
     let moviePoster = UIImageView()
-    let getDetailsButton = UIButton(type: .system)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupCell()
     }
     required init?(coder: NSCoder) {
@@ -28,7 +26,7 @@ class FvoritesCell: UICollectionViewCell {
         contentView.backgroundColor = .black
         contentView.layer.cornerRadius = 10
         contentView.clipsToBounds = true
-        [titleLabel, moviePoster, getDetailsButton].forEach {
+        [titleLabel, moviePoster].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -49,7 +47,5 @@ class FvoritesCell: UICollectionViewCell {
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        
     }
-    
 }

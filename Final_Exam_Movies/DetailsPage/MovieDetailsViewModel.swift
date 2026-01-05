@@ -10,8 +10,8 @@ import Foundation
 class MovieDetailsViewModel {
     
     private(set) var movie: MovieDetails?
-    var onUpdate: (() -> Void)?
     
+    var onUpdate: (() -> Void)?    
     let imdbID: String
     
     init(imdbID: String) {

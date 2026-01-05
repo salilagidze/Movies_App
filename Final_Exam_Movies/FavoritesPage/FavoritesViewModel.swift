@@ -18,7 +18,7 @@ class FavoritesViewModel {
     func movie(at index: Int) -> Movie {
         MoviesManager.shared.getFavMovies()[index]
     }
-    
+
     func remove(at index: Int) {
         let movie = movie(at: index)
         MoviesManager.shared.removeFavoriteMovie(movie)

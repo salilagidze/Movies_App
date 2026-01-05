@@ -10,13 +10,11 @@ import UIKit
 class HomeCell: UICollectionViewCell {
     
     static let identifier: String = "HomeCell"
-    private var movie: Movie?
     
     let titleLabel = UILabel()
     let moviePoster = UIImageView()
     let pushButton = UIButton(type: .system)
     var favoriteButtonTapped: (() -> Void)?
-
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,9 +28,9 @@ class HomeCell: UICollectionViewCell {
         moviePoster.image = nil
     }
     func setupCell() {
-            contentView.backgroundColor = .black
-            contentView.layer.cornerRadius = 10
-            contentView.clipsToBounds = true
+        contentView.backgroundColor = .black
+        contentView.layer.cornerRadius = 10
+        contentView.clipsToBounds = true
         [titleLabel, moviePoster, pushButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
@@ -48,15 +46,12 @@ class HomeCell: UICollectionViewCell {
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
             
-    ])
+        ])
         moviePoster.clipsToBounds = true
         moviePoster.layer.cornerRadius = 15
         moviePoster.contentMode = .scaleAspectFill
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        
-     
-  }
-    
+    }
 }

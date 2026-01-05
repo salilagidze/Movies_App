@@ -102,12 +102,11 @@ class SearchVC: UIViewController {
     }
     
 }
-
+//ვიუმოდელის სერჩის ფუნქციას იძახებს
 extension SearchVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.search(text: searchText)
     }
-    
 }
 
 extension SearchVC: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -124,17 +123,18 @@ extension SearchVC: UICollectionViewDataSource, UICollectionViewDelegate {
             withReuseIdentifier: SearchCell.identifier,
             for: indexPath
         ) as! SearchCell
-        
+//        eრთი ფილმის აღება ვიუმოდელიდან
         let movie = viewModel.movie(at: indexPath.item)
         cell.titleLabel.text = movie.title
         cell.yearLabel.text = movie.year
         cell.ratingLabel.text = ""
         cell.actionLabel.text = ""
         cell.runTimeLabel.text = ""
-        
+//        fილმების სიაში თავიდან მოდის მხოლოდ ინფორმაცია, იტვირთება დეტალები ასინქრონულად
         MoviesManager.shared.fetchMovieDetails(imdbID: movie.imdbID) { details in
             guard let details else { return }
             DispatchQueue.main.async {
+//         მჭირდება რომ სწორი სელ განახლდეს
                 if collectionView.indexPath(for: cell) == indexPath {
                     cell.ratingLabel.text = details.imdbRating
                     cell.actionLabel.text = details.genre
@@ -142,7 +142,7 @@ extension SearchVC: UICollectionViewDataSource, UICollectionViewDelegate {
                 }
             }
         }
-        
+//        პოსტერის ჩამოტვირთვა
         if let url = URL(string: movie.poster) {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data {

@@ -30,7 +30,6 @@ class HomeVC: UIViewController {
         return collection
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -38,11 +37,9 @@ class HomeVC: UIViewController {
         viewModel = MovieViewModel()
         setupView()
         viewModel.fetchMovies()
-        
         viewModel.reloadData = { [weak self] in
             self?.movieCollectionView.reloadData()
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +67,7 @@ class HomeVC: UIViewController {
         movieCollectionView.delegate = self
         movieCollectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.identifier)
     }
+    
 }
 
 extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -81,10 +79,9 @@ extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell else {
             return UICollectionViewCell()
         }
-        //ფილმების მონაცემები
+        
         let movie = viewModel.movie(at: indexPath.row)
         cell.titleLabel.text = movie.title
-        
         
         if let url = URL(string: movie.poster) {
             URLSession.shared.dataTask(with: url) { (data, _, _) in
@@ -110,9 +107,9 @@ extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate {
         let movie = viewModel.movie(at: indexPath.row)
         let detailsVC = DetailVC()
         showDetails(for: movie)
-        
     }
 }
+
 extension HomeVC: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

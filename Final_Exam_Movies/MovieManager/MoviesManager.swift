@@ -5,6 +5,7 @@
 //  Created by Sali  on 25.12.25.
 //
 
+
 import Foundation
 
 class MoviesManager {
@@ -60,7 +61,6 @@ class MoviesManager {
             favoriteMovies.contains { $0.imdbID == movie.imdbID }
         }
     }
-    
     func fetchMovieDetails(imdbID:String, completion: @escaping (MovieDetails?) -> Void) {
         let urlString = "https://www.omdbapi.com/?apikey=fd67c604&i=\(imdbID)"
         guard let url = URL(string: urlString) else {

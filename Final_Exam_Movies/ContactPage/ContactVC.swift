@@ -24,7 +24,7 @@ class ContactVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+//        aნიმაცია თავიდანვე რომ გამოჩნდეს ვიუზე
         animation(view: phoneIcon, delay: 0.9)
         animation(view: emailIcon, delay: 0.8)
         
@@ -79,7 +79,6 @@ class ContactVC: UIViewController {
         phoneLabel.isUserInteractionEnabled = true
         emailIcon.isUserInteractionEnabled = true
         emailLabel.isUserInteractionEnabled = true
-        
         let phoneTap = UITapGestureRecognizer(target: self, action: #selector(phoneTapped))
         phoneIcon.addGestureRecognizer(phoneTap)
         phoneLabel.addGestureRecognizer(phoneTap)

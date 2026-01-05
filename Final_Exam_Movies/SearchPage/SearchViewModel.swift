@@ -28,9 +28,11 @@ class SearchViewModel {
             }
         }
     }
+//    movies მასივში რამდენი ფილმია რომ დამიბრუნდეს
     func count() -> Int {
         movies.count
     }
+//    ინდექსი რომ აიღოს და ისე დამიბრუნოს ფილმები
     func movie(at index: Int) -> Movie {
         movies[index]
     }

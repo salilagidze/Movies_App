@@ -100,7 +100,7 @@ class DetailVC: UIViewController {
         mainMovieTitleLabel.numberOfLines = 0
         mainMovieTitleLabel.lineBreakMode = .byWordWrapping
         mainMovieTitleLabel.textAlignment = .center
-        
+    
         mainPoster.contentMode = .scaleAspectFill
         mainPoster.clipsToBounds = true
         mainPoster.backgroundColor = .black
@@ -280,7 +280,7 @@ class DetailVC: UIViewController {
             }
         }.resume()
     }
-    
+
     private func bindViewModel() {
         viewModel.onUpdate = { [weak self] in
             guard let self = self,
@@ -293,7 +293,7 @@ class DetailVC: UIViewController {
             self.runTime.text = movie.runtime
             self.action.text = movie.genre
             
-            
+
             if let url = URL(string: movie.poster) {
                 URLSession.shared.dataTask(with: url) { data, _, _ in
                     guard let data = data else { return }
@@ -304,7 +304,7 @@ class DetailVC: UIViewController {
                     }
                 }.resume()
             }
-            
+
             let FavMovie = self.makeMovieFromDetails(movie)
             let isFav = MoviesManager.shared.isFavoriteMovie(FavMovie)
             self.updateFavoriteButton(isfavorite: isFav)

@@ -66,7 +66,7 @@ class FavoritesVC: UIViewController {
         
         FavoritesomvieCollectionView.dataSource = self
         FavoritesomvieCollectionView.delegate = self
-        FavoritesomvieCollectionView.register(HomeCell.self, forCellWithReuseIdentifier: HomeCell.identifier)
+        FavoritesomvieCollectionView.register(FavoritesCell.self, forCellWithReuseIdentifier: FavoritesCell.identifier)
     }
 }
 
@@ -93,6 +93,7 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
             stackView.spacing = 8
             stackView.translatesAutoresizingMaskIntoConstraints = false
             
+            //აქ გავაკეთე კონტეინერი და კონტეინერში ჩავაგდე სთაქვიუ
             container.addSubview(stackView)
             
             NSLayoutConstraint.activate([
@@ -110,15 +111,12 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCell.identifier, for: indexPath) as? HomeCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FavoritesCell.identifier, for: indexPath) as? FavoritesCell
         else {
             return UICollectionViewCell()
         }
         let movie = viewModel.movie(at: indexPath.row)
         cell.titleLabel.text = movie.title
-        cell.favoriteButtonTapped = { [weak self] in
-            self?.viewModel.remove(at: indexPath.row)
-        }
         
         if let url = URL(string: movie.poster) {
             URLSession.shared.dataTask(with: url) { data, _, _ in
@@ -131,7 +129,7 @@ extension FavoritesVC: UICollectionViewDataSource, UICollectionViewDelegate {
         }
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movie = viewModel.movie(at: indexPath.row)
         let detailVC = DetailVC()
